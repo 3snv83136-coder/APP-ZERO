@@ -18,10 +18,11 @@ const TOOLS: Tool[] = [
   { href: '/clients',      emoji: '👥', label: 'Clients',       desc: 'Gérer vos clients',            bg: 'bg-gradient-to-br from-teal-500 to-teal-700',      text: 'white' },
   { href: '/planning',     emoji: '📅', label: 'Planning',      desc: 'Calendrier & rendez-vous',     bg: 'bg-gradient-to-br from-emerald-500 to-emerald-700', text: 'white' },
   { href: '/weed',         emoji: '🌿', label: 'Weed',          desc: 'Calculateur de neurones',      bg: 'bg-gradient-to-br from-green-700 to-green-900',    text: 'white' },
+  { href: '/nouveaux-horizons', emoji: '🏗️', label: 'Horizons', desc: 'Nouveaux Horizons · Élancourt', bg: 'bg-gradient-to-br from-amber-500 to-orange-700', text: 'white' },
   { href: '/mail',         emoji: '📧', label: 'Emails',        desc: 'Emails envoyés',               bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',      text: 'white' },
 ]
 
-const SPLASH_DURATION = 6000
+const SPLASH_DURATION = 8000
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
@@ -34,9 +35,9 @@ export default function Home() {
     }
     sessionStorage.setItem('app_splash_seen', '1')
 
-    const t1 = setTimeout(() => setPhase('impact'), 720)
-    const t2 = setTimeout(() => setPhase('crack'), 1200)
-    const t3 = setTimeout(() => setPhase('reveal'), 2160)
+    const t1 = setTimeout(() => setPhase('impact'), 960)
+    const t2 = setTimeout(() => setPhase('crack'), 1600)
+    const t3 = setTimeout(() => setPhase('reveal'), 2880)
     const t4 = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
