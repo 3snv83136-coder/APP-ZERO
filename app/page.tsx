@@ -17,6 +17,7 @@ const TOOLS: Tool[] = [
   { href: '/statistiques', emoji: '📊', label: 'Statistiques',  desc: 'Tableau de bord & KPIs',       bg: 'bg-gradient-to-br from-rose-500 to-rose-700',      text: 'white' },
   { href: '/clients',      emoji: '👥', label: 'Clients',       desc: 'Gérer vos clients',            bg: 'bg-gradient-to-br from-teal-500 to-teal-700',      text: 'white' },
   { href: '/planning',     emoji: '📅', label: 'Planning',      desc: 'Calendrier & rendez-vous',     bg: 'bg-gradient-to-br from-emerald-500 to-emerald-700', text: 'white' },
+  { href: '/weed',         emoji: '🌿', label: 'Weed',          desc: 'Calculateur de neurones',      bg: 'bg-gradient-to-br from-green-700 to-green-900',    text: 'white' },
   { href: '/mail',         emoji: '📧', label: 'Emails',        desc: 'Emails envoyés',               bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',      text: 'white' },
 ]
 
