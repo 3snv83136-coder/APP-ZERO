@@ -43,7 +43,7 @@ export default function Home() {
             Eric Ingrand
           </h1>
           <p className="mt-4 text-lg sm:text-2xl text-blue-200 font-light tracking-wide">
-            Intellignece Of Weed Of Marocco
+            Intelligence Of Weed Of Marocco
           </p>
           <div className="mt-10 flex justify-center gap-2">
             {[0, 1, 2].map(i => (
