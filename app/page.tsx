@@ -22,7 +22,7 @@ const TOOLS: Tool[] = [
   { href: '/mail',         emoji: '📧', label: 'Emails',        desc: 'Emails envoyés',               bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',      text: 'white' },
 ]
 
-const SPLASH_DURATION = 8000
+const SPLASH_DURATION = 11000
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
@@ -35,9 +35,9 @@ export default function Home() {
     }
     sessionStorage.setItem('app_splash_seen', '1')
 
-    const t1 = setTimeout(() => setPhase('impact'), 960)
-    const t2 = setTimeout(() => setPhase('crack'), 1600)
-    const t3 = setTimeout(() => setPhase('reveal'), 2880)
+    const t1 = setTimeout(() => setPhase('impact'), 1320)
+    const t2 = setTimeout(() => setPhase('crack'), 2200)
+    const t3 = setTimeout(() => setPhase('reveal'), 3960)
     const t4 = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
@@ -46,6 +46,30 @@ export default function Home() {
   if (showSplash) {
     return (
       <main className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f1a] overflow-hidden transition-opacity duration-700 ${phase === 'reveal' ? 'opacity-0' : 'opacity-100'}`}>
+        {/* Fond drapeau marocain */}
+        <div className={`absolute inset-0 transition-opacity duration-1000 ${phase !== 'fly' ? 'opacity-100' : 'opacity-0'}`} style={{ background: 'linear-gradient(180deg, #c1272d 0%, #8b0000 100%)' }} />
+
+        {/* Étoile marocaine (pentagramme vert) */}
+        <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-1000 ${phase === 'crack' || phase === 'reveal' ? 'opacity-30 scale-100' : 'opacity-0 scale-50'}`}>
+          <svg viewBox="0 0 200 200" className="w-32 h-32 sm:w-48 sm:h-48">
+            <polygon
+              points="100,10 118,65 176,65 129,100 147,156 100,122 53,156 71,100 24,65 82,65"
+              fill="none"
+              stroke="#006233"
+              strokeWidth="6"
+              strokeLinejoin="miter"
+            />
+            <polygon
+              points="100,10 118,65 176,65 129,100 147,156 100,122 53,156 71,100 24,65 82,65"
+              fill="none"
+              stroke="#006233"
+              strokeWidth="6"
+              strokeLinejoin="miter"
+              transform="rotate(180 100 100)"
+            />
+          </svg>
+        </div>
+
         {/* Flash impact */}
         {phase === 'impact' && (
           <div className="absolute inset-0 bg-white animate-flash pointer-events-none" />
