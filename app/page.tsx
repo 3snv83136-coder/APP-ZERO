@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 
 type Tool = {
   href: string
@@ -21,71 +20,51 @@ const TOOLS: Tool[] = [
   { href: '/mail',         emoji: '📧', label: 'Emails',        desc: 'Emails envoyés',               bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',      text: 'white' },
 ]
 
-const DASHBOARD_CODE = '0000'
+const SPLASH_DURATION = 5000
 
 export default function Home() {
-  const router = useRouter()
-  const [skipAnimation, setSkipAnimation] = useState(false)
-  const [unlocked, setUnlocked] = useState(false)
-  const [codeChecked, setCodeChecked] = useState(false)
-  const [codeInput, setCodeInput] = useState('')
-  const [codeError, setCodeError] = useState('')
+  const [showSplash, setShowSplash] = useState(true)
+  const [fadeOut, setFadeOut] = useState(false)
 
   useEffect(() => {
-    if (typeof window === 'undefined') return
-    if (sessionStorage.getItem('app_dashboard_unlocked') === '1') {
-      setUnlocked(true)
+    const fadeTimer = setTimeout(() => setFadeOut(true), SPLASH_DURATION - 600)
+    const hideTimer = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
+    return () => {
+      clearTimeout(fadeTimer)
+      clearTimeout(hideTimer)
     }
-    setCodeChecked(true)
-    if (sessionStorage.getItem('app_seen_intro') === '1') {
-      setSkipAnimation(true)
-    } else {
-      sessionStorage.setItem('app_seen_intro', '1')
-    }
-  }, [router])
+  }, [])
 
-  function handleCodeSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const value = codeInput.trim()
-    if (value === DASHBOARD_CODE) {
-      sessionStorage.setItem('app_dashboard_unlocked', '1')
-      setUnlocked(true); setCodeError('')
-      return
-    }
-    setCodeError('Code incorrect.')
-    setCodeInput('')
-  }
-
-  if (codeChecked && !unlocked) {
+  if (showSplash) {
     return (
-      <main className="relative min-h-screen flex items-center justify-center bg-slate-50 text-slate-900 px-4">
-        <div className="relative z-10 w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-7 shadow-sm">
-          <div className="text-center mb-5">
-            <div className="mx-auto w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mb-3">
-              <svg className="w-6 h-6 text-slate-600" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
-            </div>
-            <h1 className="text-xl font-bold tracking-tight">Tableau de bord</h1>
-            <p className="text-[11px] uppercase tracking-[0.2em] text-slate-500 mt-1 font-semibold">Code d&apos;accès requis</p>
+      <main className={`fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-800 via-blue-600 to-blue-900 transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
+        <div className="text-center px-4 splash-enter">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-lg">
+            Eric Ingrand
+          </h1>
+          <p className="mt-4 text-lg sm:text-2xl text-blue-200 font-light tracking-wide">
+            Intellignece Of Weed Of Marocco
+          </p>
+          <div className="mt-10 flex justify-center gap-2">
+            {[0, 1, 2].map(i => (
+              <div
+                key={i}
+                className="w-2.5 h-2.5 rounded-full bg-white/60 animate-bounce"
+                style={{ animationDelay: `${i * 0.2}s` }}
+              />
+            ))}
           </div>
-          <form onSubmit={handleCodeSubmit} className="space-y-3" autoComplete="off">
-            <input
-              type="password"
-              inputMode="numeric"
-              autoFocus
-              value={codeInput}
-              onChange={e => { setCodeInput(e.target.value); if (codeError) setCodeError('') }}
-              placeholder="••••"
-              className="w-full text-center text-2xl font-bold tracking-[0.6em] bg-slate-50 text-slate-900 rounded-xl px-4 py-4 outline-none border border-slate-200 focus:border-[#1e3a5f] focus:ring-4 focus:ring-[#1e3a5f]/10 placeholder:text-slate-300"
-            />
-            {codeError && <p className="text-red-600 text-sm text-center font-medium">{codeError}</p>}
-            <button
-              type="submit"
-              className="w-full bg-[#1e3a5f] hover:bg-[#162d4a] active:scale-[0.98] transition-all text-white font-semibold py-3 rounded-xl"
-            >
-              Déverrouiller
-            </button>
-          </form>
         </div>
+
+        <style jsx>{`
+          @keyframes splashFadeUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+          }
+          .splash-enter {
+            animation: splashFadeUp 0.8s ease-out forwards;
+          }
+        `}</style>
       </main>
     )
   }
@@ -94,7 +73,7 @@ export default function Home() {
     <main className="relative min-h-screen bg-slate-50 text-slate-900">
       <header className="bg-[#1e3a5f] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 sm:py-6 flex items-center justify-between gap-4">
-          <div className={`flex items-baseline gap-3 ${skipAnimation ? '' : 'app-drop'}`}>
+          <div className="flex items-baseline gap-3 app-drop">
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight leading-none">APP-ZERO</h1>
             <div className="hidden sm:block text-[10px] uppercase tracking-[0.25em] text-white/60 font-semibold">
               Votre entreprise
@@ -107,7 +86,7 @@ export default function Home() {
       </header>
 
       <div className="relative z-10">
-        <div className={`px-4 sm:px-6 pt-6 sm:pt-8 pb-12 ${skipAnimation ? '' : 'buttons-reveal'}`}>
+        <div className="px-4 sm:px-6 pt-6 sm:pt-8 pb-12 buttons-reveal">
           <div className="max-w-7xl mx-auto">
             <div className="text-[11px] uppercase tracking-[0.18em] text-slate-500 font-semibold mb-4 px-1">Modules</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
