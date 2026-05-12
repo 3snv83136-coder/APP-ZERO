@@ -1,4 +1,5 @@
 'use client'
+import BackBar from "@/components/BackBar"
 
 const MOCK_CLIENTS = [
   { id: '1', nom: 'Dupont SARL', email: 'contact@dupont.fr', telephone: '01 23 45 67 89', ville: 'Paris' },

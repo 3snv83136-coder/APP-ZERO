@@ -1,4 +1,5 @@
 'use client'
+import BackBar from "@/components/BackBar"
 
 const MOCK_EMAILS = [
   { id: '1', to: 'dupont@example.fr', subject: 'Confirmation intervention', date: '2026-05-12', status: 'Envoyé' },

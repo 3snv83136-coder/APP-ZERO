@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from "react"
+import BackBar from "@/components/BackBar"
 
 const MAX_THC = 500
 const NEURON_COUNT = 120

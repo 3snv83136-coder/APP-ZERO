@@ -1,4 +1,5 @@
 'use client'
+import BackBar from "@/components/BackBar"
 
 const MOCK_EVENTS = [
   { id: '1', title: 'RDV Dupont SARL', date: '2026-05-14', time: '09:00', type: 'Intervention' },

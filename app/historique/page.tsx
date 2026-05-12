@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from "react"
+import BackBar from "@/components/BackBar"
 
 type Entry = {
   id: string
