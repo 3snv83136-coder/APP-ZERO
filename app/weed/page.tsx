@@ -1,25 +1,33 @@
 'use client'
-import { useState, useMemo } from "react"
+import { useState, useRef, useEffect } from "react"
 
 const MAX_THC = 500
 const NEURON_COUNT = 120
 
-function Neuron({ x, y, size, alive, delay }: { x: number; y: number; size: number; alive: boolean; delay: number }) {
+interface NeuronData {
+  id: number
+  x: number
+  y: number
+  size: number
+  delay: number
+}
+
+function NeuronDot({ data, alive }: { data: NeuronData; alive: boolean }) {
   return (
     <div
       className="absolute rounded-full transition-all duration-700 ease-out"
       style={{
-        left: `${x}%`,
-        top: `${y}%`,
-        width: size,
-        height: size,
+        left: `${data.x}%`,
+        top: `${data.y}%`,
+        width: data.size,
+        height: data.size,
         opacity: alive ? 0.9 : 0.08,
         transform: alive ? 'scale(1)' : 'scale(0.3)',
         background: alive
           ? 'radial-gradient(circle at 30% 30%, #a3e635, #4ade80, #166534)'
           : 'radial-gradient(circle at 30% 30%, #3f6212, #14532d)',
         boxShadow: alive ? '0 0 6px #4ade80, 0 0 12px #22c55e' : 'none',
-        transitionDelay: `${delay}ms`,
+        transitionDelay: `${data.delay}ms`,
       }}
     />
   )
@@ -27,25 +35,27 @@ function Neuron({ x, y, size, alive, delay }: { x: number; y: number; size: numb
 
 export default function WeedPage() {
   const [thc, setThc] = useState(50)
+  const [mounted, setMounted] = useState(false)
+  const neuronData = useRef<NeuronData[]>([])
 
-  const neuronsAlive = Math.max(0, Math.round(NEURON_COUNT * (1 - thc / MAX_THC)))
-  const neuronsDead = NEURON_COUNT - neuronsAlive
-  const healthScore = Math.max(0, Math.round(100 - (thc / MAX_THC) * 100))
-
-  const neurons = useMemo(() => {
-    const arr = []
+  useEffect(() => {
+    const arr: NeuronData[] = []
     for (let i = 0; i < NEURON_COUNT; i++) {
       arr.push({
         id: i,
         x: Math.random() * 92 + 2,
         y: Math.random() * 88 + 4,
         size: Math.random() * 6 + 3,
-        alive: i < neuronsAlive,
         delay: Math.random() * 300,
       })
     }
-    return arr
-  }, [neuronsAlive])
+    neuronData.current = arr
+    setMounted(true)
+  }, [])
+
+  const neuronsAlive = Math.max(0, Math.round(NEURON_COUNT * (1 - thc / MAX_THC)))
+  const neuronsDead = NEURON_COUNT - neuronsAlive
+  const healthScore = Math.max(0, Math.round(100 - (thc / MAX_THC) * 100))
 
   const healthLabel =
     healthScore >= 80 ? 'Excellent 😇' :
@@ -97,8 +107,8 @@ export default function WeedPage() {
         </div>
 
         <div className="mt-6 bg-black/40 backdrop-blur rounded-2xl p-4 border border-green-800/50 relative h-80 overflow-hidden">
-          {neurons.map(n => (
-            <Neuron key={n.id} {...n} />
+          {mounted && neuronData.current.map((n, i) => (
+            <NeuronDot key={n.id} data={n} alive={i < neuronsAlive} />
           ))}
           <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
             <div className="bg-black/60 rounded-xl px-4 py-2">
