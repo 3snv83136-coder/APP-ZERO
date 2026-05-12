@@ -21,7 +21,7 @@ const TOOLS: Tool[] = [
   { href: '/mail',         emoji: '📧', label: 'Emails',        desc: 'Emails envoyés',               bg: 'bg-gradient-to-br from-cyan-500 to-cyan-700',      text: 'white' },
 ]
 
-const SPLASH_DURATION = 5000
+const SPLASH_DURATION = 6000
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
@@ -34,9 +34,9 @@ export default function Home() {
     }
     sessionStorage.setItem('app_splash_seen', '1')
 
-    const t1 = setTimeout(() => setPhase('impact'), 600)
-    const t2 = setTimeout(() => setPhase('crack'), 1000)
-    const t3 = setTimeout(() => setPhase('reveal'), 1800)
+    const t1 = setTimeout(() => setPhase('impact'), 720)
+    const t2 = setTimeout(() => setPhase('crack'), 1200)
+    const t3 = setTimeout(() => setPhase('reveal'), 2160)
     const t4 = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
