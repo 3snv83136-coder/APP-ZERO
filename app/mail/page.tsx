@@ -14,8 +14,9 @@ const statusColors: Record<string, string> = {
 
 export default function MailPage() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <BackBar title="📧 Emails" />
+      <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">📧 Emails</h1>
         <p className="text-gray-500 mb-6">Historique des emails envoyés (données de démonstration).</p>
 

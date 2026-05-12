@@ -71,6 +71,7 @@ export default function WeedPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-[#0a1f0a] via-[#0d2e0d] to-[#061206]">
+      <BackBar title="🌿 Weed" />
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 20 Q120 10 140 20 Q160 40 140 70 Q160 90 140 110 Q120 130 100 110 Q80 130 60 110 Q40 90 60 70 Q40 40 60 20 Q80 10 100 20Z' fill='%2322c55e' opacity='0.3'/%3E%3Cpath d='M100 30 L105 50 L125 55 L108 70 L112 90 L100 80 L88 90 L92 70 L75 55 L95 50Z' fill='%234ade80' opacity='0.2'/%3E%3C/svg%3E")`,
         backgroundSize: '120px 120px',

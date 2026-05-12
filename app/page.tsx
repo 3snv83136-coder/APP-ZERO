@@ -25,45 +25,127 @@ const SPLASH_DURATION = 5000
 
 export default function Home() {
   const [showSplash, setShowSplash] = useState(true)
-  const [fadeOut, setFadeOut] = useState(false)
+  const [phase, setPhase] = useState<'fly' | 'impact' | 'crack' | 'reveal'>('fly')
 
   useEffect(() => {
-    const fadeTimer = setTimeout(() => setFadeOut(true), SPLASH_DURATION - 600)
-    const hideTimer = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
-    return () => {
-      clearTimeout(fadeTimer)
-      clearTimeout(hideTimer)
+    if (typeof window !== 'undefined' && sessionStorage.getItem('app_splash_seen') === '1') {
+      setShowSplash(false)
+      return
     }
+    sessionStorage.setItem('app_splash_seen', '1')
+
+    const t1 = setTimeout(() => setPhase('impact'), 600)
+    const t2 = setTimeout(() => setPhase('crack'), 1000)
+    const t3 = setTimeout(() => setPhase('reveal'), 1800)
+    const t4 = setTimeout(() => setShowSplash(false), SPLASH_DURATION)
+
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
   }, [])
 
   if (showSplash) {
     return (
-      <main className={`fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-800 via-blue-600 to-blue-900 transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="text-center px-4 splash-enter">
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight drop-shadow-lg">
-            Eric Ingrand
-          </h1>
-          <p className="mt-4 text-lg sm:text-2xl text-blue-200 font-light tracking-wide">
-            Intelligence Of Weed Of Marocco
-          </p>
-          <div className="mt-10 flex justify-center gap-2">
-            {[0, 1, 2].map(i => (
+      <main className={`fixed inset-0 z-50 flex items-center justify-center bg-[#0a0f1a] overflow-hidden transition-opacity duration-700 ${phase === 'reveal' ? 'opacity-0' : 'opacity-100'}`}>
+        {/* Flash impact */}
+        {phase === 'impact' && (
+          <div className="absolute inset-0 bg-white animate-flash pointer-events-none" />
+        )}
+
+        {/* Cercles de verre brisé */}
+        {phase === 'crack' && (
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {Array.from({ length: 8 }).map((_, i) => {
+              const angle = (i / 8) * Math.PI * 2
+              const dist = 120 + Math.random() * 200
+              const size = 20 + Math.random() * 60
+              return (
+                <div
+                  key={i}
+                  className="absolute bg-white/10 rounded-full"
+                  style={{
+                    width: size,
+                    height: size,
+                    left: `calc(50% + ${Math.cos(angle) * dist}px - ${size / 2}px)`,
+                    top: `calc(50% + ${Math.sin(angle) * dist}px - ${size / 2}px)`,
+                    animation: `shatterFrag 1.2s ease-out ${i * 0.05}s forwards`,
+                  }}
+                />
+              )
+            })}
+            {/* Lignes de fissure */}
+            {Array.from({ length: 6 }).map((_, i) => (
               <div
-                key={i}
-                className="w-2.5 h-2.5 rounded-full bg-white/60 animate-bounce"
-                style={{ animationDelay: `${i * 0.2}s` }}
+                key={`crack-${i}`}
+                className="absolute bg-white/20"
+                style={{
+                  height: 1,
+                  width: 80 + Math.random() * 160,
+                  left: `${20 + Math.random() * 60}%`,
+                  top: `${10 + Math.random() * 80}%`,
+                  transform: `rotate(${Math.random() * 360}deg)`,
+                  animation: `crackLine 1s ease-out ${i * 0.08}s forwards`,
+                }}
               />
             ))}
           </div>
+        )}
+
+        {/* Texte */}
+        <div className={`relative z-10 text-center px-4 ${phase === 'impact' ? 'animate-shake' : ''}`}>
+          <h1 className={`text-4xl sm:text-6xl md:text-7xl font-black text-white tracking-tight leading-none transition-all duration-1000 ${
+            phase === 'fly' ? 'animate-flyIn' : phase === 'impact' ? 'scale-110' : phase === 'crack' ? 'scale-100 text-white/90' : 'scale-100'
+          }`}
+          style={phase === 'crack' ? { textShadow: '0 0 30px rgba(255,255,255,0.4), 2px 2px 0 rgba(255,255,255,0.1), -1px -1px 0 rgba(255,255,255,0.05)' } : {}}
+          >
+            Eric Ingrand
+          </h1>
+          <p className={`mt-4 text-lg sm:text-2xl text-blue-300 font-light tracking-wide transition-all duration-1000 delay-300 ${
+            phase === 'crack' || phase === 'reveal' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
+            Intelligence Of Weed Of Marocco
+          </p>
         </div>
 
         <style jsx>{`
-          @keyframes splashFadeUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
+          @keyframes flyIn {
+            0%   { transform: translateY(-120vh) scale(0.3); opacity: 0; filter: blur(8px); }
+            60%  { transform: translateY(5vh) scale(1.05); opacity: 1; filter: blur(0); }
+            80%  { transform: translateY(-2vh) scale(0.98); }
+            100% { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
           }
-          .splash-enter {
-            animation: splashFadeUp 0.8s ease-out forwards;
+          .animate-flyIn {
+            animation: flyIn 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+          }
+
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-6px); }
+            20% { transform: translateX(6px); }
+            30% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            50% { transform: translateX(-2px); }
+            60% { transform: translateX(2px); }
+          }
+          .animate-shake {
+            animation: shake 0.4s ease-out;
+          }
+
+          @keyframes flash {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+          }
+          .animate-flash {
+            animation: flash 0.3s ease-out forwards;
+          }
+
+          @keyframes shatterFrag {
+            0% { transform: scale(0) translate(0, 0); opacity: 0.8; }
+            100% { transform: scale(1) translate(0, 0); opacity: 0; }
+          }
+
+          @keyframes crackLine {
+            0% { opacity: 0; transform: scaleX(0); }
+            50% { opacity: 0.6; transform: scaleX(1); }
+            100% { opacity: 0; transform: scaleX(1); }
           }
         `}</style>
       </main>

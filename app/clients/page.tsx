@@ -9,8 +9,9 @@ const MOCK_CLIENTS = [
 
 export default function ClientsPage() {
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <BackBar title="👥 Clients" />
+      <div className="max-w-4xl mx-auto p-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">👥 Clients</h1>
         <p className="text-gray-500 mb-6">Annuaire clients (données de démonstration).</p>
 
