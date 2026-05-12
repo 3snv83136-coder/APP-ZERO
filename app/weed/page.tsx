@@ -1,7 +1,5 @@
 'use client'
 import { useState, useMemo } from "react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
 
 const MAX_THC = 500
 const NEURON_COUNT = 120
@@ -28,14 +26,7 @@ function Neuron({ x, y, size, alive, delay }: { x: number; y: number; size: numb
 }
 
 export default function WeedPage() {
-  const { data: session } = useSession()
-  const router = useRouter()
   const [thc, setThc] = useState(50)
-
-  if (!session) {
-    router.push('/login')
-    return null
-  }
 
   const neuronsAlive = Math.max(0, Math.round(NEURON_COUNT * (1 - thc / MAX_THC)))
   const neuronsDead = NEURON_COUNT - neuronsAlive
@@ -70,7 +61,6 @@ export default function WeedPage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-[#0a1f0a] via-[#0d2e0d] to-[#061206]">
-      {/* Fond feuilles */}
       <div className="absolute inset-0 opacity-10 pointer-events-none" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpath d='M100 20 Q120 10 140 20 Q160 40 140 70 Q160 90 140 110 Q120 130 100 110 Q80 130 60 110 Q40 90 60 70 Q40 40 60 20 Q80 10 100 20Z' fill='%2322c55e' opacity='0.3'/%3E%3Cpath d='M100 30 L105 50 L125 55 L108 70 L112 90 L100 80 L88 90 L92 70 L75 55 L95 50Z' fill='%234ade80' opacity='0.2'/%3E%3C/svg%3E")`,
         backgroundSize: '120px 120px',
@@ -84,7 +74,6 @@ export default function WeedPage() {
           Intelligence Of Weed Of Marocco
         </p>
 
-        {/* Slider THC */}
         <div className="mt-8 bg-black/30 backdrop-blur rounded-2xl p-6 border border-green-800/50">
           <label className="block text-green-300 text-sm font-semibold mb-3">
             THC ingurgité — <span className="text-green-400 font-bold">{thc} mg</span>
@@ -107,13 +96,10 @@ export default function WeedPage() {
           </div>
         </div>
 
-        {/* Visualisation neurones */}
         <div className="mt-6 bg-black/40 backdrop-blur rounded-2xl p-4 border border-green-800/50 relative h-80 overflow-hidden">
           {neurons.map(n => (
             <Neuron key={n.id} {...n} />
           ))}
-
-          {/* Stats overlay */}
           <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
             <div className="bg-black/60 rounded-xl px-4 py-2">
               <div className="text-xs text-green-500 uppercase tracking-wider">Neurones actifs</div>
@@ -126,7 +112,6 @@ export default function WeedPage() {
           </div>
         </div>
 
-        {/* Bilan santé */}
         <div className="mt-6 bg-black/40 backdrop-blur rounded-2xl p-6 border border-green-800/50 text-center">
           <p className="text-green-400/60 text-xs uppercase tracking-widest mb-2">Indice Santé (factice)</p>
           <div className={`text-4xl font-black ${healthColor} drop-shadow-lg`}>
@@ -146,7 +131,6 @@ export default function WeedPage() {
             />
           </div>
           <p className="text-green-400/40 text-xs mt-2">{healthScore}% de capacité neuronale restante</p>
-
           <p className="text-green-600/30 text-[10px] mt-8 italic">
             * Ce calculateur est purement fictif et humoristique. Aucune valeur scientifique.
           </p>
