@@ -1,0 +1,29 @@
+{
+  "name": "APP-ZERO",
+  "short_name": "APP-ZERO",
+  "description": "Application métier",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3a5f",
+  "theme_color": "#1e3a5f",
+  "orientation": "portrait-primary",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Nouveau",
+      "short_name": "Nouveau",
+      "description": "Créer une nouvelle entrée",
+      "url": "/nouveau"
+    }
+  ]
+}
